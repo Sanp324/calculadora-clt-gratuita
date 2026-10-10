@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7faf8" />
+    <meta name="description" content="Estime rescisão CLT, férias com adicional de 1/3, salário líquido e seguro-desemprego. Calculadoras trabalhistas informativas e gratuitas." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Direito CLT — calculadoras trabalhistas gratuitas" />
+    <meta property="og:description" content="Estime rescisão CLT, férias, salário líquido e seguro-desemprego com calculadoras trabalhistas informativas." />
+    <meta property="og:site_name" content="Direito CLT" />
+    <title>Calculadora de Rescisão CLT, Férias e Seguro-Desemprego | Direito CLT</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Como é calculada a rescisão trabalhista?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A rescisão pode incluir saldo de salário, aviso-prévio, 13º proporcional, férias adquiridas ou proporcionais com adicional de 1/3 e, em alguns desligamentos, multa do FGTS. As verbas variam conforme o motivo do desligamento, o contrato e os valores pagos durante o vínculo."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quem pode receber o seguro-desemprego?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Em regra, o trabalhador formal dispensado sem justa causa precisa cumprir o tempo mínimo de salários conforme o número da solicitação, não ter renda própria suficiente e não receber benefício previdenciário incompatível. A habilitação é decidida pelos canais oficiais, após análise de todos os requisitos."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Como funciona o adicional de 1/3 de férias?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A Constituição prevê o pagamento de pelo menos um terço a mais que a remuneração normal durante as férias. O valor pode depender do período adquirido, remuneração variável, faltas não justificadas e eventual abono pecuniário."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Os valores dos simuladores são definitivos?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Não. São estimativas informativas e não substituem o cálculo do RH, de contador ou advogado trabalhista. Convenções coletivas, documentos, médias salariais, descontos e mudanças na legislação podem alterar os valores."
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="stylesheet" href="css/output.css" />
+    <style>
+      :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: #f7faf8; color: #17352f; }
+      button, input, select { font: inherit; }
+      button { cursor: pointer; }
+      .ad-slot { display: grid; place-items: center; border: 1px dashed #b8cbc5; border-radius: 14px; background: repeating-linear-gradient(135deg, #fbfdfc, #fbfdfc 9px, #f6faf8 9px, #f6faf8 18px); color: #60746d; }
+      .tab-button[aria-selected="true"] { color: #087c67; border-color: #087c67; background: #effaf6; }
+      .tab-button:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #0d9675; outline-offset: 2px; }
+      .form-input { width: 100%; border: 1px solid #d7e3de; border-radius: 10px; background: #fff; padding: .72rem .85rem; color: #17352f; }
+      .form-input:focus { border-color: #0d9675; outline: 2px solid #0d967533; }
+      /* Campos com prefixo "R$": o utilitário pl-10 fica em @layer utilities e é
+         sobreposto pelo .form-input (sem camada). Reservamos o padding-left aqui
+         para que o valor digitado nunca fique sob o símbolo "R$". Os campos de
+         Salário Líquido têm id; nas demais calculadoras os inputs não têm id,
+         por isso usamos name com escopo de form (o "salario" se repete em dois
+         forms, e o escopo evita que um seletor pegue o campo errado). */
+      #salario-liquido-bruto,
+      #salario-liquido-outros,
+      #rescisao-form input[name="salario"],
+      #rescisao-form input[name="fgts"],
+      #ferias-form input[name="salario"],
+      #seguro-form input[name="media"] { padding-left: 2.5rem; }
+      .result-row + .result-row { border-top: 1px solid #e8efec; }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+    </style>
+  </head>
+  <body>
+    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-3 focus:font-bold focus:text-emerald-800 focus:shadow-lg" href="#calculadoras">Pular para o conteúdo</a>
+    <div class="mx-auto min-h-screen max-w-[1440px] px-4 sm:px-6 lg:px-10">
+      <header class="pt-7 sm:pt-9">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <a href="#" class="flex items-center gap-3 text-inherit no-underline" aria-label="Direito CLT, página inicial">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-700 text-lg font-black text-white shadow-lg shadow-emerald-900/10" aria-hidden="true">CLT</span>
+            <span>
+              <span class="block text-lg font-extrabold tracking-tight text-slate-900">Direito CLT</span>
+              <span class="block text-xs font-medium text-slate-500">Informação clara para o seu trabalho</span>
+            </span>
+          </a>
+          <nav aria-label="Navegação principal" class="flex items-center gap-2 text-sm font-semibold text-slate-600 sm:gap-5">
+            <a class="rounded-lg px-2 py-2 hover:text-emerald-800" href="#calculadoras">Calculadoras</a>
+            <a class="rounded-lg px-2 py-2 hover:text-emerald-800" href="#como-funciona">Como funciona</a>
+          </nav>
+        </div>
+        <div class="mb-6 mt-9 max-w-3xl sm:mt-12">
+          <p class="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> Calculadoras trabalhistas gratuitas</p>
+          <h1 class="text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">Entenda seus direitos. <span class="text-emerald-700">Faça as contas.</span></h1>
+          <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">Estime valores de rescisão e férias e consulte informações gerais sobre o seguro-desemprego — de um jeito simples e direto.</p>
+        </div>
+        <div class="ad-slot mb-8 min-h-[90px] px-4 py-5 text-center text-xs font-semibold uppercase tracking-[.16em] sm:min-h-[100px]" aria-label="Espaço para anúncio no topo">
+          <span>Espaço para Anúncio <span class="mt-1 block text-[10px] font-normal normal-case tracking-normal">Banner superior</span></span>
+        </div>
+      </header>
+
+      <main id="calculadoras" class="pb-12">
+        <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px] xl:gap-8">
+          <section class="min-w-0" aria-labelledby="tools-heading">
+            <div class="mb-5">
+              <p class="text-xs font-bold uppercase tracking-[.15em] text-emerald-700">Ferramentas</p>
+              <h2 id="tools-heading" class="mt-1 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">O que você precisa calcular?</h2>
+            </div>
+
+            <div role="tablist" aria-label="Calculadoras e consultas trabalhistas" class="mb-5 grid grid-cols-1 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:grid-cols-2 xl:grid-cols-4">
+              <button id="tab-rescisao" class="tab-button rounded-xl border border-transparent px-3 py-3 text-left text-sm font-bold text-slate-600 transition hover:bg-slate-50" type="button" role="tab" aria-selected="true" aria-controls="panel-rescisao" tabindex="0">
+                <span class="mb-1 block text-base" aria-hidden="true">🧾</span>Calculadora de Rescisão
+              </button>
+              <button id="tab-ferias" class="tab-button rounded-xl border border-transparent px-3 py-3 text-left text-sm font-bold text-slate-600 transition hover:bg-slate-50" type="button" role="tab" aria-selected="false" aria-controls="panel-ferias" tabindex="-1">
+                <span class="mb-1 block text-base" aria-hidden="true">☀️</span>Cálculo de Férias
+              </button>
+              <button id="tab-seguro" class="tab-button rounded-xl border border-transparent px-3 py-3 text-left text-sm font-bold text-slate-600 transition hover:bg-slate-50" type="button" role="tab" aria-selected="false" aria-controls="panel-seguro" tabindex="-1">
+                <span class="mb-1 block text-base" aria-hidden="true">🛡️</span>Seguro-Desemprego
+              </button>
+              <button id="tab-salario-liquido" class="tab-button rounded-xl border border-transparent px-3 py-3 text-left text-sm font-bold text-slate-600 transition hover:bg-slate-50" type="button" role="tab" aria-selected="false" aria-controls="panel-salario-liquido" tabindex="-1">
+                <span class="mb-1 block text-base" aria-hidden="true">💵</span>Salário Líquido
+              </button>
+            </div>
+
+            <section id="panel-rescisao" class="tab-panel rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" role="tabpanel" aria-labelledby="tab-rescisao" tabindex="0">
+              <div class="mb-6">
+                <h3 class="text-lg font-extrabold text-slate-900">Calculadora de Rescisão</h3>
+                <p class="mt-1 text-sm leading-6 text-slate-500">Informe os dados do vínculo para obter uma estimativa das principais verbas rescisórias.</p>
+              </div>
+              <form id="rescisao-form" class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                <label class="block text-sm font-semibold text-slate-700">Salário bruto mensal
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input class="form-input pl-10" name="salario" type="number" min="0" step="0.01" placeholder="3.000,00" required /></span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Tipo de desligamento
+                  <select class="form-input mt-1.5" name="motivo" required>
+                    <option value="sem-justa-causa">Dispensa sem justa causa</option>
+                    <option value="pedido">Pedido de demissão</option>
+                    <option value="acordo">Acordo entre as partes</option>
+                    <option value="justa-causa">Dispensa por justa causa</option>
+                  </select>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Data de admissão
+                  <input class="form-input mt-1.5" name="admissao" type="date" required />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Data de desligamento
+                  <input class="form-input mt-1.5" name="desligamento" type="date" required />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Categoria do trabalhador (opcional)
+                  <select class="form-input mt-1.5" name="categoria">
+                    <option value="">Não informar</option>
+                    <option value="comercio">Comércio</option>
+                    <option value="servicos">Serviços</option>
+                    <option value="industria">Indústria</option>
+                    <option value="construcao">Construção civil</option>
+                    <option value="rural">Trabalho rural</option>
+                    <option value="saude">Saúde</option>
+                    <option value="educacao">Educação</option>
+                    <option value="transporte">Transporte</option>
+                    <option value="outra">Outra categoria</option>
+                  </select>
+                  <span class="mt-1 block text-xs font-normal text-slate-500">A categoria não altera esta estimativa; confira o piso e a convenção coletiva aplicáveis.</span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Número de dependentes para IRRF
+                  <input class="form-input mt-1.5" name="dependentes" type="number" min="0" max="50" step="1" value="0" required />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Aviso prévio
+                  <select class="form-input mt-1.5" name="aviso" required>
+                    <option value="trabalhado">Trabalhado</option>
+                    <option value="indenizado">Indenizado</option>
+                    <option value="nao-cumprido">Não cumprido (possível desconto)</option>
+                    <option value="dispensado">Dispensado pela outra parte</option>
+                  </select>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Valor de referência do FGTS para estimativa da multa
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input class="form-input pl-10" name="fgts" type="number" min="0" step="0.01" placeholder="0,00" /></span>
+                  <span class="mt-1 block text-xs font-normal text-slate-500">Informe o valor do FGTS usado como referência para estimar a multa rescisória. Para maior precisão, consulte o extrato do FGTS.</span>
+                  <span class="mt-2 block rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-normal leading-5 text-amber-900">A multa é uma estimativa calculada sobre o valor informado. O valor oficial pode variar conforme o histórico de depósitos, atualizações, saques e demais informações da conta vinculada.</span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Períodos completos de férias ainda não gozados
+                  <input class="form-input mt-1.5" name="ferias-vencidas" type="number" min="0" max="20" step="1" value="0" required />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Desses períodos, quantos passaram do prazo concessivo?
+                  <input class="form-input mt-1.5" name="ferias-em-dobro" type="number" min="0" max="20" step="1" value="0" required />
+                  <span class="mt-1 block text-xs font-normal text-slate-500">Informe apenas férias não gozadas dentro do prazo legal.</span>
+                </label>
+                <div class="sm:col-span-2">
+                  <button class="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-800" type="submit">Calcular estimativa</button>
+                </div>
+              </form>
+              <div id="rescisao-result" class="mt-6 hidden rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 sm:p-5" aria-live="polite"></div>
+            </section>
+
+            <section id="panel-ferias" class="tab-panel hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" role="tabpanel" aria-labelledby="tab-ferias" tabindex="0">
+              <div class="mb-6">
+                <h3 class="text-lg font-extrabold text-slate-900">Cálculo de Férias</h3>
+                <p class="mt-1 text-sm leading-6 text-slate-500">Estime o valor bruto das férias e do abono pecuniário, se desejar vender dias.</p>
+              </div>
+              <form id="ferias-form" class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                <label class="block text-sm font-semibold text-slate-700">Salário bruto mensal
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input class="form-input pl-10" name="salario" type="number" min="0" step="0.01" placeholder="3.000,00" required /></span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Dias de férias a tirar
+                  <input class="form-input mt-1.5" name="dias" type="number" min="10" max="30" step="1" value="30" required />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Faltas não justificadas no período aquisitivo
+                  <input class="form-input mt-1.5" name="faltas" type="number" min="0" max="100" step="1" value="0" required />
+                </label>
+                <label class="flex items-start gap-3 text-sm font-semibold text-slate-700 sm:col-span-2">
+                  <input class="mt-1 h-4 w-4 accent-emerald-700" name="abono" type="checkbox" />
+                  <span>Quero converter em abono pecuniário até 1/3 das férias (vender dias)<span class="mt-1 block text-xs font-normal text-slate-500">A quantidade máxima depende dos dias de férias a que você tem direito.</span></span>
+                </label>
+                <div class="sm:col-span-2">
+                  <button class="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-800" type="submit">Calcular férias</button>
+                </div>
+              </form>
+              <div id="ferias-result" class="mt-6 hidden rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 sm:p-5" aria-live="polite"></div>
+            </section>
+
+            <section id="panel-seguro" class="tab-panel hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" role="tabpanel" aria-labelledby="tab-seguro" tabindex="0">
+              <div class="mb-6">
+                <h3 class="text-lg font-extrabold text-slate-900">Consulta de Seguro-Desemprego</h3>
+                <p class="mt-1 text-sm leading-6 text-slate-500">Confira critérios gerais que podem influenciar o direito ao benefício.</p>
+              </div>
+              <form id="seguro-form" class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                <label class="block text-sm font-semibold text-slate-700">Como ocorreu o desligamento?
+                  <select class="form-input mt-1.5" name="motivo" required>
+                    <option value="sem-justa-causa">Dispensa sem justa causa</option>
+                    <option value="acordo">Acordo entre as partes</option>
+                    <option value="pedido">Pedido de demissão</option>
+                    <option value="justa-causa">Dispensa por justa causa</option>
+                  </select>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Média dos últimos 3 salários
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input class="form-input pl-10" name="media" type="number" min="0" step="0.01" placeholder="3.000,00" required /></span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Quantas vezes já solicitou o benefício?
+                  <select class="form-input mt-1.5" name="solicitacao" required>
+                    <option value="1">1ª vez</option>
+                    <option value="2">2ª vez</option>
+                    <option value="3">3ª vez ou mais</option>
+                  </select>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Meses com salário no período de carência aplicável
+                  <input class="form-input mt-1.5" name="meses-carencia" type="number" min="0" max="18" step="1" placeholder="Ex.: 12" required />
+                  <span class="mt-1 block text-xs font-normal text-slate-500">Últimos 18 meses (1ª vez), 12 meses (2ª) ou 6 meses (3ª ou mais).</span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Meses trabalhados nos últimos 36 meses
+                  <input class="form-input mt-1.5" name="meses-36" type="number" min="0" max="36" step="1" placeholder="Ex.: 12" required />
+                </label>
+                <div class="sm:col-span-2">
+                  <button class="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-800" type="submit">Consultar critérios</button>
+                </div>
+              </form>
+              <div id="seguro-result" class="mt-6 hidden rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 sm:p-5" aria-live="polite"></div>
+            </section>
+
+            <section id="panel-salario-liquido" class="tab-panel hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" role="tabpanel" aria-labelledby="tab-salario-liquido" tabindex="0">
+              <div class="mb-6">
+                <h3 class="text-lg font-extrabold text-slate-900">Calculadora de Salário Líquido</h3>
+                <p class="mt-1 text-sm leading-6 text-slate-500">Descubra quanto você recebe após os principais descontos do salário CLT.</p>
+              </div>
+              <form id="salario-liquido-form" class="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                <label class="block text-sm font-semibold text-slate-700" for="salario-liquido-bruto">Salário bruto
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input id="salario-liquido-bruto" class="form-input pl-10" name="salario-bruto" type="number" min="0" step="0.01" placeholder="Ex.: 3000" required /></span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700" for="salario-liquido-dependentes">Número de dependentes
+                  <input id="salario-liquido-dependentes" class="form-input mt-1.5" name="dependentes" type="number" min="0" step="1" value="0" />
+                </label>
+                <label class="block text-sm font-semibold text-slate-700" for="salario-liquido-outros">Outros descontos
+                  <span class="relative mt-1.5 block"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">R$</span><input id="salario-liquido-outros" class="form-input pl-10" name="outros-descontos" type="number" min="0" step="0.01" value="0" /></span>
+                  <span class="mt-1 block text-xs font-normal text-slate-500">Informe outros descontos mensais que deseja considerar, como plano de saúde, empréstimo, pensão ou outros descontos em folha.</span>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700" for="salario-liquido-ano">Ano de referência
+                  <select id="salario-liquido-ano" class="form-input mt-1.5" name="ano" required>
+                    <option value="2026">2026</option>
+                  </select>
+                </label>
+                <div class="sm:col-span-2">
+                  <button class="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-800" type="submit">Calcular salário líquido</button>
+                </div>
+              </form>
+              <div id="salario-liquido-result" class="mt-6 hidden rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 sm:p-5" aria-live="polite"></div>
+            </section>
+
+            <div class="ad-slot mt-5 min-h-[100px] px-4 py-5 text-center text-xs font-semibold uppercase tracking-[.16em]" aria-label="Espaço para anúncio abaixo dos resultados">
+              <span>Espaço para Anúncio <span class="mt-1 block text-[10px] font-normal normal-case tracking-normal">Abaixo do resultado</span></span>
+            </div>
+          </section>
+
+          <aside class="lg:sticky lg:top-6" aria-label="Publicidade e informações">
+            <div class="ad-slot min-h-[250px] px-4 py-6 text-center text-xs font-semibold uppercase tracking-[.16em]" aria-label="Espaço para anúncio na lateral">
+              <span>Espaço para Anúncio <span class="mt-1 block text-[10px] font-normal normal-case tracking-normal">Banner lateral / sidebar</span></span>
+            </div>
+            <section id="como-funciona" class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 class="text-sm font-extrabold text-slate-900">Como funciona</h2>
+              <ul class="mt-3 space-y-3 text-sm leading-5 text-slate-600">
+                <li class="flex gap-2"><span class="font-bold text-emerald-700">01</span><span>Escolha uma ferramenta e preencha os dados.</span></li>
+                <li class="flex gap-2"><span class="font-bold text-emerald-700">02</span><span>Veja uma estimativa calculada no seu navegador.</span></li>
+                <li class="flex gap-2"><span class="font-bold text-emerald-700">03</span><span>Confirme os valores com um profissional ou canal oficial.</span></li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+        <section id="perguntas-frequentes" class="mt-10 border-t border-slate-200 pt-8" aria-labelledby="faq-heading">
+          <p class="text-xs font-bold uppercase tracking-[.15em] text-emerald-700">Dúvidas comuns</p>
+          <h2 id="faq-heading" class="mt-1 text-2xl font-extrabold tracking-tight text-slate-900">Perguntas frequentes</h2>
+          <div class="mt-5 grid gap-3 md:grid-cols-2">
+            <details class="rounded-xl border border-slate-200 bg-white p-4">
+              <summary class="cursor-pointer font-bold text-slate-800">Como é calculada a rescisão trabalhista?</summary>
+              <p class="mt-3 text-sm leading-6 text-slate-600">A rescisão pode incluir saldo de salário, aviso-prévio, 13º proporcional, férias adquiridas ou proporcionais com adicional de 1/3 e, em alguns desligamentos, multa do FGTS. As verbas variam conforme o motivo do desligamento, o contrato e os valores pagos durante o vínculo.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-4">
+              <summary class="cursor-pointer font-bold text-slate-800">Quem pode receber o seguro-desemprego?</summary>
+              <p class="mt-3 text-sm leading-6 text-slate-600">Em regra, o trabalhador formal dispensado sem justa causa precisa cumprir o tempo mínimo de salários conforme o número da solicitação, não ter renda própria suficiente e não receber benefício previdenciário incompatível. A habilitação é decidida pelos canais oficiais, após análise de todos os requisitos.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-4">
+              <summary class="cursor-pointer font-bold text-slate-800">Como funciona o adicional de 1/3 de férias?</summary>
+              <p class="mt-3 text-sm leading-6 text-slate-600">A Constituição prevê o pagamento de pelo menos um terço a mais que a remuneração normal durante as férias. O valor pode depender do período adquirido, remuneração variável, faltas não justificadas e eventual abono pecuniário.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-4">
+              <summary class="cursor-pointer font-bold text-slate-800">Os valores dos simuladores são definitivos?</summary>
+              <p class="mt-3 text-sm leading-6 text-slate-600">Não. São estimativas informativas e não substituem o cálculo do RH, de contador ou advogado trabalhista. Convenções coletivas, documentos, médias salariais, descontos e mudanças na legislação podem alterar os valores.</p>
+            </details>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-slate-200 py-8">
+        <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+          <div>
+            <p class="font-extrabold text-slate-900">Direito CLT</p>
+            <p class="mt-1 text-xs text-slate-500">Informação para apoiar suas decisões de trabalho.</p>
+          </div>
+          <nav aria-label="Links legais" class="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-slate-600">
+            <a class="hover:text-emerald-800" href="termos.html">Termos de Uso</a>
+            <a class="hover:text-emerald-800" href="politica-de-privacidade.html">Política de Privacidade</a>
+            <a class="hover:text-emerald-800" href="#isencao-legal">Isenção de Responsabilidade Legal</a>
+          </nav>
+        </div>
+        <div class="mt-7 border-t border-slate-200 pt-6 text-xs leading-5 text-slate-500">
+          <section id="isencao-legal"><h2 class="font-bold text-slate-700">Isenção de Responsabilidade Legal</h2><p class="mt-1">Os cálculos são simuladores informativos, baseados nas informações fornecidas e em regras gerais. Não substituem o RH, contador, advogado trabalhista nem a conferência de documentos e canais oficiais. As tabelas podem mudar e casos individuais, convenções coletivas e decisões judiciais podem alterar o resultado.</p></section>
+          <p class="mt-3">Fontes oficiais para conferência: <a class="font-semibold text-emerald-800 underline" href="https://www.gov.br/inss/pt-br/direitos-e-deveres/inscricao-e-contribuicao/tabela-de-contribuicao-mensal" target="_blank" rel="noopener noreferrer">tabela de contribuição do INSS</a>, <a class="font-semibold text-emerald-800 underline" href="https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026" target="_blank" rel="noopener noreferrer">tabela do IRPF 2026</a> e <a class="font-semibold text-emerald-800 underline" href="https://www.gov.br/pt-br/servicos/solicitar-o-seguro-desemprego" target="_blank" rel="noopener noreferrer">serviço oficial do seguro-desemprego</a>.</p>
+        </div>
+        <p class="mt-6 text-center text-xs text-slate-400">© <span id="current-year"></span> Direito CLT. Conteúdo meramente informativo.</p>
+      </footer>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Varredura de conteúdo (Tailwind v4).
+   Inclui explicitamente os arquivos do site para garantir que todas as classes
+   usadas nos HTMLs e no app.js (calculadoras) entrem no css/output.css. */
+@source "../index.html";
+@source "../termos.html";
+@source "../politica-de-privacidade.html";
+@source "../app.js";
+

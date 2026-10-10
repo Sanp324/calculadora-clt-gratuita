@@ -1,0 +1,6 @@
+# Dependências (build local do Tailwind; não necessárias em runtime)
+node_modules/
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
